@@ -1,0 +1,30 @@
+
+SELECT * FROM T_STUDENT;
+
+SELECT name, age FROM T_STUDENT;
+
+SELECT name, age FROM T_STUDENT where age < 60;
+
+SELECT name as tag,
+age as level
+FROM T_STUDENT as stu
+WHERE age > 60;
+
+SELECT p.name as tag
+FROM T_PERSON as p
+where name != 'beforeold'; 
+
+-- name count
+SELECT COUNT(name) from T_ab;
+-- all count
+SELECT COUNT(*) from T_ab;
+
+SELECT * FROM T_ABC ORDER BY age;
+SELECT * FROM T_ABC ORDER BY age DESC;
+SELECT * FROM T_ABC ORDER BY age DESC, id ASC;
+
+SELECT * FROM T_ABC LIMIT 5;
+SELECT * FROM T_ABC LIMIT 0, 10;
+
+
+
