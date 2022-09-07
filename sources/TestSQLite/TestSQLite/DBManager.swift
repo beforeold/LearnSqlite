@@ -75,4 +75,55 @@ age INTEGER DEFAULT 18
 """
         execute(sql: sql)
     }
+    
+    public func query(sql: String) -> [[String: Any]] {
+        let cSql = sql.cString(using: .utf8)
+        var stmt: OpaquePointer?
+        let ret = sqlite3_prepare_v2(db, cSql, -1, &stmt, nil)
+        ret.retPrinted("query")
+        
+        guard let stmt = stmt else {
+            return []
+        }
+
+        var list = [[String: Any]]()
+        
+        while sqlite3_step(stmt) == SQLITE_ROW {
+            let map = fetch(stmt)
+            list.append(map)
+        }
+        return list
+    }
+    
+    private func fetch(_ stmt: OpaquePointer) -> [String: Any] {
+        let count = sqlite3_column_count(stmt)
+        
+        var map = [String: Any]()
+        
+        for columIndex in 0..<count {
+            let cName = sqlite3_column_name(stmt, columIndex)
+            let name = String(cString: cName!)
+            let type = sqlite3_column_type(stmt, columIndex)
+            
+            var value: Any
+            
+            switch type {
+            case SQLITE_INTEGER:
+                value = Int(sqlite3_column_int64(stmt, columIndex))
+                
+            case SQLITE_FLOAT:
+                value = sqlite3_column_double(stmt, columIndex)
+                
+            case SQLITE3_TEXT:
+                let sString = sqlite3_column_text(stmt, columIndex)!
+                value = String(cString: sString)
+            default:
+                value = NSNull()
+            }
+            
+            map[name] = value
+        }
+        
+        return map
+    }
 }

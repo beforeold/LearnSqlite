@@ -24,3 +24,13 @@ INSERT INTO T_PERSON
         DBManager.shared.execute(sql: sql)
     }
 }
+
+extension Person {
+    static func queryAll() {
+        let sql = """
+SELECT * FROM T_Person ORDER BY age
+"""
+        let ret = DBManager.shared.query(sql: sql)
+        print(ret)
+    }
+}
