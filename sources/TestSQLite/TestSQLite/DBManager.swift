@@ -15,6 +15,9 @@ fileprivate  extension Int32 {
     }
 }
 
+/// getDocumentsDirectory URL
+///
+/// @discussion same as NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
 func getDocumentsDirectory() -> URL {
     let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     let documentsDirectory = paths[0]
