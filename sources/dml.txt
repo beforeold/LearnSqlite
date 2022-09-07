@@ -1,0 +1,6 @@
+
+INSERT INTO T_STUDENT
+	(name, age)
+	VALUES
+	('beforeold', 88)
+;
