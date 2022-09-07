@@ -1,6 +1,17 @@
 
+// insert a new record
 INSERT INTO T_STUDENT
 	(name, age)
 	VALUES
 	('beforeold', 88)
 ;
+
+-- update all records
+UPDATE T_STUDENT SET name = 'zhangsan';
+UPDATE T_STUDENT SET name = 'zhangsan' WHERE id = 88;
+
+-- delete all records
+DELETE FROM T_STUDENT;
+DELETE FROM T_STUDENT WHERE age = 5;
+DELETE FROM T_STUDENT WHERE age IS 5;
+DELETE FROM T_STUDENT WHERE age > 5;
