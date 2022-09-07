@@ -9,11 +9,20 @@ import Foundation
 import SQLite3
 
 
+fileprivate let enablesPrint = false
+
 fileprivate  extension Int32 {
     func retPrinted(_ msg: String) {
-        print("\(msg) isSucess: \(self == SQLITE_OK)")
+        ooprint("\(msg) isSucess: \(self == SQLITE_OK)")
     }
 }
+
+fileprivate func ooprint(_ msg: String) {
+    guard enablesPrint else { return }
+    
+    print(msg)
+}
+
 
 /// getDocumentsDirectory URL
 ///
@@ -39,7 +48,7 @@ public class DBManager {
         dbExecute {
             var path = getDocumentsDirectory().path
             path = (path as NSString).appendingPathComponent(name) as String
-            print("db path: \(path)")
+            ooprint("db path: \(path)")
             
             let ret = sqlite3_open(path, &self.db)
             ret.retPrinted("open db")
@@ -52,17 +61,21 @@ public class DBManager {
     
     public func execute(sql: String) {
         dbExecute {
-            let cSql = sql.cString(using: .utf8)
-            var errorMsg: UnsafeMutablePointer<CChar>?
-            let ret = sqlite3_exec(self.db, cSql, nil, nil, &errorMsg)
-            var msg = "done"
-            if let errorMsg = errorMsg {
-                let string = String(cString: errorMsg)
-                msg = string
-            }
-            ret.retPrinted("[\(sql)]")
-            print("end msg: \(msg)")
+            self._execute(sql: sql)
         }
+    }
+    
+    func _execute(sql: String) {
+        let cSql = sql.cString(using: .utf8)
+        var errorMsg: UnsafeMutablePointer<CChar>?
+        let ret = sqlite3_exec(self.db, cSql, nil, nil, &errorMsg)
+        var msg = "done"
+        if let errorMsg = errorMsg {
+            let string = String(cString: errorMsg)
+            msg = string
+        }
+        ret.retPrinted("[\(sql)]")
+        ooprint("end msg: \(msg)")
     }
   
     public func createTable(name: String) {

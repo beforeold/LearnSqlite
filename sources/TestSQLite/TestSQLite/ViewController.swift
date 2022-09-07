@@ -29,7 +29,9 @@ class ViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        Person.queryAll()
+        // Person.insertMany()
+        // insertPerson()
+        // Person.queryAll()
     }
 
 }

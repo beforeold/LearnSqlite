@@ -21,7 +21,7 @@ INSERT INTO T_PERSON
        VALUES
        (\(age), '\(name)')
 """
-        DBManager.shared.execute(sql: sql)
+        DBManager.shared._execute(sql: sql)
     }
 }
 
@@ -32,5 +32,14 @@ SELECT * FROM T_Person ORDER BY age
 """
         let ret = DBManager.shared.query(sql: sql)
         print(ret)
+    }
+    
+    static func insertMany() {
+        let start = CFAbsoluteTimeGetCurrent()
+        for i in 0..<10_000 {
+            let p = Person(age: i, name: "bo-\(i)")
+            p.inserted()
+        }
+        print("diff \(CFAbsoluteTimeGetCurrent() - start)")
     }
 }
