@@ -23,8 +23,13 @@ class ViewController: UIViewController {
         DBManager.shared.createTable(name: "T_PERSON")
     }
 
+    private func insertPerson() {
+        let person = Person(age: 10, name: "brook")
+        person.inserted()
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        insertPerson()
     }
 
 }

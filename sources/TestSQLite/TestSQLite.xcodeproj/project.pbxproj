@@ -14,6 +14,7 @@
 		9434210628C8979F00FB4183 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9434210528C8979F00FB4183 /* Assets.xcassets */; };
 		9434210928C8979F00FB4183 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9434210728C8979F00FB4183 /* LaunchScreen.storyboard */; };
 		9434211328C8C38E00FB4183 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434211228C8C38E00FB4183 /* DBManager.swift */; };
+		9434211528C8C98700FB4183 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9434211428C8C98700FB4183 /* Person.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		9434210A28C8979F00FB4183 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9434211128C897B300FB4183 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		9434211228C8C38E00FB4183 /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
+		9434211428C8C98700FB4183 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				943420FE28C8979D00FB4183 /* SceneDelegate.swift */,
 				9434210028C8979D00FB4183 /* ViewController.swift */,
 				9434211228C8C38E00FB4183 /* DBManager.swift */,
+				9434211428C8C98700FB4183 /* Person.swift */,
 				9434210228C8979D00FB4183 /* Main.storyboard */,
 				9434210528C8979F00FB4183 /* Assets.xcassets */,
 				9434210728C8979F00FB4183 /* LaunchScreen.storyboard */,
@@ -151,6 +154,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9434211528C8C98700FB4183 /* Person.swift in Sources */,
 				9434210128C8979D00FB4183 /* ViewController.swift in Sources */,
 				943420FD28C8979D00FB4183 /* AppDelegate.swift in Sources */,
 				943420FF28C8979D00FB4183 /* SceneDelegate.swift in Sources */,

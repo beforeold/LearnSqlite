@@ -33,7 +33,7 @@ public class DBManager {
     private var db: OpaquePointer?
     
     public func openDB(name: String) {
-        execute {
+        dbExecute {
             var path = getDocumentsDirectory().path
             path = (path as NSString).appendingPathComponent(name) as String
             print("db path: \(path)")
@@ -43,14 +43,25 @@ public class DBManager {
         }
     }
     
-    public func execute(task: @escaping () -> Void) {
+    public func dbExecute(task: @escaping () -> Void) {
         queue.async(execute: task)
     }
     
     public func execute(sql: String) {
-        
+        dbExecute {
+            let cSql = sql.cString(using: .utf8)
+            var errorMsg: UnsafeMutablePointer<CChar>?
+            let ret = sqlite3_exec(self.db, cSql, nil, nil, &errorMsg)
+            var msg = "done"
+            if let errorMsg = errorMsg {
+                let string = String(cString: errorMsg)
+                msg = string
+            }
+            ret.retPrinted("[\(sql)]")
+            print("end msg: \(msg)")
+        }
     }
-    
+  
     public func createTable(name: String) {
         let sql = """
 CREATE TABLE IF NOT EXISTS \(name)(
@@ -59,11 +70,6 @@ name TEXT NOT NULL,
 age INTEGER DEFAULT 18
 )
 """
-        let cSql = sql.cString(using: .utf8)
-        execute {
-            var errorMsg: UnsafeMutablePointer<CChar>?
-            let ret = sqlite3_exec(self.db, cSql, nil, nil, &errorMsg)
-            ret.retPrinted("create table")
-        }
+        execute(sql: sql)
     }
 }
