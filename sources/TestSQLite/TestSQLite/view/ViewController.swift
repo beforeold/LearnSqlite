@@ -6,10 +6,15 @@
 //
 
 import UIKit
+import SwiftUI
 import SQLite3
 
-class ViewController: UIViewController {
-
+class ViewController: UIHostingController<BodyView> {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder,
+                   rootView: BodyView())
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -18,22 +23,11 @@ class ViewController: UIViewController {
         setupDB()
     }
     
+    // MARK: - private
+    
     private func setupDB() {
         DBManager.shared.openDB(name: "demo.sqlite")
         DBManager.shared.createTable(name: "T_PERSON")
     }
-
-    private func insertPerson() {
-        let person = Person(age: 10, name: "brook")
-        person.inserted()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // Person.insertMany()
-        // insertPerson()
-        // Person.queryAll()
-        Person.insertManyWithTransaction()
-    }
-
 }
 

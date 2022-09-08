@@ -89,6 +89,52 @@ public class DBManager {
         ret.retPrinted("[\(sql)]")
         ooprint("end msg: \(msg)")
     }
+    
+    /// for same name C macro define
+    private var SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+    
+    func batch(sql: String, args: CVarArg...) {
+        let cSql = sql.cString(using: .utf8)
+        
+        var stmt: OpaquePointer?
+        sqlite3_prepare_v2(db, cSql, -1, &stmt, nil)
+        
+        guard let stmt = stmt else {
+            ooprint("failed to prepare stmt")
+            return
+        }
+
+        for (index, arg) in args.enumerated() {
+            let seq = Int32(index + 1)
+            if let int = arg as? Int64 {
+                sqlite3_bind_int64(stmt, seq, int)
+            }
+            else if let double = arg as? Double {
+                sqlite3_bind_double(stmt, seq, double)
+            }
+            else if let string = arg as? String {
+                let cString = string.cString(using: .utf8)!
+                sqlite3_bind_text(stmt, seq, cString, -1, SQLITE_TRANSIENT)
+            }
+            else {
+                // 暂不处理
+            }
+        }
+        
+        defer {
+            sqlite3_finalize(stmt)
+        }
+        
+        guard sqlite3_step(stmt) == SQLITE_DONE else {
+            return
+        }
+        
+        guard sqlite3_reset(stmt) == SQLITE_OK else {
+            return
+        }
+        
+        // over to sqlite3_finalize
+    }
   
     public func createTable(name: String) {
         let sql = """
@@ -117,6 +163,9 @@ age INTEGER DEFAULT 18
             let map = fetch(stmt)
             list.append(map)
         }
+        
+        sqlite3_finalize(stmt)
+        
         return list
     }
     

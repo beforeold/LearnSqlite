@@ -53,4 +53,21 @@ SELECT * FROM T_Person ORDER BY age
         DBManager.shared.commitTransaction()
         print("diff \(CFAbsoluteTimeGetCurrent() - start)")
     }
+    
+    static func insertManyWithTransactionAndBatch() {
+        let start = CFAbsoluteTimeGetCurrent()
+        DBManager.shared.beginTransaction()
+        for i in 0..<10_000 {
+            let p = Person(age: i, name: "bo-\(i)")
+            let sql = """
+INSERT INTO T_PERSON
+    (name, age)
+    VALUES
+    (?,?)
+"""
+            DBManager.shared.batch(sql: sql, args: p.name, p.age)
+        }
+        DBManager.shared.commitTransaction()
+        print("diff \(CFAbsoluteTimeGetCurrent() - start)")
+    }
 }
