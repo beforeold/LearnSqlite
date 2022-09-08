@@ -27,7 +27,8 @@ class ViewController: UIHostingController<BodyView> {
     
     private func setupDB() {
         DBManager.shared.openDB(name: "demo.sqlite")
-        DBManager.shared.createTable(name: "T_PERSON")
+        
+        Person.createTable(name: "T_PERSON")
     }
 }
 

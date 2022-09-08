@@ -45,7 +45,7 @@ public class DBManager {
     private var db: OpaquePointer?
     
     public func openDB(name: String) {
-        dbExecute {
+        withDBQueue { _ in
             var path = getDocumentsDirectory().path
             path = (path as NSString).appendingPathComponent(name) as String
             ooprint("db path: \(path)")
@@ -55,29 +55,25 @@ public class DBManager {
         }
     }
     
-    public func dbExecute(task: @escaping () -> Void) {
-        queue.async(execute: task)
-    }
-    
-    public func execute(sql: String) {
-        dbExecute {
-            self._execute(sql: sql)
+    public func withDBQueue(action: @escaping (DBManager) -> Void) {
+        queue.async {
+            action(self)
         }
     }
     
     public func beginTransaction() {
-        _execute(sql: "BEGIN TRANSACTION")
+        execute(sql: "BEGIN TRANSACTION")
     }
     
     public func commitTransaction() {
-        _execute(sql: "COMMIT TRANSACTION")
+        execute(sql: "COMMIT TRANSACTION")
     }
     
     public func rollbackTransaction() {
-        _execute(sql: "ROLLBACK TRANSACTION")
+        execute(sql: "ROLLBACK TRANSACTION")
     }
     
-    func _execute(sql: String) {
+    public func execute(sql: String) {
         let cSql = sql.cString(using: .utf8)
         var errorMsg: UnsafeMutablePointer<CChar>?
         let ret = sqlite3_exec(self.db, cSql, nil, nil, &errorMsg)
@@ -93,7 +89,7 @@ public class DBManager {
     /// for same name C macro define
     private var SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
     
-    func batch(sql: String, args: CVarArg...) {
+    func batchInsert(sql: String, args: CVarArg...) {
         let cSql = sql.cString(using: .utf8)
         
         var stmt: OpaquePointer?
@@ -135,17 +131,6 @@ public class DBManager {
         
         // over to sqlite3_finalize
     }
-  
-    public func createTable(name: String) {
-        let sql = """
-CREATE TABLE IF NOT EXISTS \(name)(
-id INTEGER PRIMARY KEY AUTOINCREMENT,
-name TEXT NOT NULL,
-age INTEGER DEFAULT 18
-)
-"""
-        execute(sql: sql)
-    }
     
     public func query(sql: String) -> [[String: Any]] {
         let cSql = sql.cString(using: .utf8)
@@ -169,6 +154,7 @@ age INTEGER DEFAULT 18
         return list
     }
     
+    /// fetch one item from the statement
     private func fetch(_ stmt: OpaquePointer) -> [String: Any] {
         let count = sqlite3_column_count(stmt)
         
