@@ -32,6 +32,7 @@ class ViewController: UIViewController {
         // Person.insertMany()
         // insertPerson()
         // Person.queryAll()
+        Person.insertManyWithTransaction()
     }
 
 }

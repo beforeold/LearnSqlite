@@ -65,6 +65,18 @@ public class DBManager {
         }
     }
     
+    public func beginTransaction() {
+        _execute(sql: "BEGIN TRANSACTION")
+    }
+    
+    public func commitTransaction() {
+        _execute(sql: "COMMIT TRANSACTION")
+    }
+    
+    public func rollbackTransaction() {
+        _execute(sql: "ROLLBACK TRANSACTION")
+    }
+    
     func _execute(sql: String) {
         let cSql = sql.cString(using: .utf8)
         var errorMsg: UnsafeMutablePointer<CChar>?
