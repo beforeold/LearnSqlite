@@ -131,8 +131,9 @@ SELECT COUNT(*) AS totalCount
 FROM T_PERSON
 """
             let totalCount = (manager.query(sql: sql).first?["totalCount"] as? Int) ?? 0
-            let count = totalCount >= 10 ? totalCount : totalCount
-            let offset = totalCount - 10
+            let pageSize = 10
+            let count = totalCount >= pageSize ? pageSize : totalCount
+            let offset = totalCount - pageSize
             
             let sql2 = """
 SELECT * FROM T_PERSON
