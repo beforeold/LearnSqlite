@@ -20,7 +20,7 @@ class ViewController: UIHostingController<BodyView> {
         // Do any additional setup after loading the view.
         
         
-        setupDB()
+        // setupDB()
     }
     
     // MARK: - private

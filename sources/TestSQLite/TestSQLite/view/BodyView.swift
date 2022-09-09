@@ -39,8 +39,8 @@ struct BodyView: View {
                 }
             }
         }.onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1,
-                                          execute: refreshCount)
+            // DispatchQueue.main.asyncAfter(deadline: .now() + 1,
+               //                           execute: refreshCount)
         }
     }
     
